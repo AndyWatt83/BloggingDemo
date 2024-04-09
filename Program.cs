@@ -1,5 +1,6 @@
 using BloggingDemo;
 using BloggingDemo.Components;
+using BloggingDemo.Shared;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddDbContext<BlogDemoContext>(options =>
                 options.UseSqlite("Data Source=pizza.db"));
+
+builder.Services.AddScoped<IBlogRepository, DatabaseRepository>();
 
 var app = builder.Build();
 

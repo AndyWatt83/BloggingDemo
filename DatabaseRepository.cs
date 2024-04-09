@@ -13,10 +13,12 @@ public class DatabaseRepository : IBlogRepository
         _context = context;
     }
 
-    public Task<int> CreateBlogPost(BlogPost post)
+    public Task<bool> CreateBlogPost(BlogPost post)
     {
         throw new NotImplementedException();
     }
 
     public async Task<List<BlogPost>> GetAllPostsAsync() => await _context.BlogPosts.ToListAsync();
+
+    public async Task<BlogPost?> GetPostByIdAsync(int id) => await _context.BlogPosts.FindAsync(id);
 }
