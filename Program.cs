@@ -1,4 +1,6 @@
+using BloggingDemo;
 using BloggingDemo.Components;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +8,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddDbContext<BlogDemoContext>(options =>
+                options.UseSqlite("Data Source=pizza.db"));
+
 var app = builder.Build();
+
+// Initialize the database
+var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+using (var scope = scopeFactory.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BlogDemoContext>();
+    if (db.Database.EnsureCreated())
+    {
+        SeedData.Initialize(db);
+    }
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
